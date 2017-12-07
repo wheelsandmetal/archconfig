@@ -1,6 +1,6 @@
 #!/bin/sh
 
-userresources=$HOME/.Xresources
+userresources=$HOME/.config/Xresources
 usermodmap=$HOME/.Xmodmap
 sysresources=/etc/X11/xinit/.Xresources
 sysmodmap=/etc/X11/xinit/.Xmodmap
@@ -55,5 +55,6 @@ sudo bash $HOME/.config/scripts/wifi-spoof-bern.sh # Only need for Bern wifi, th
 # If this is a new install run, uncomment the line below and restart X then recomment it (or don't I don't care)
 #sudo localectl set-x11-keymap gb pc105 "" ctrl:swapcaps
 
-exec $HOME/.config/st/st &
+exec $HOME/.config/slstatus/slstatus &
+exec urxvt &
 exec $HOME/.config/dwm/dwm

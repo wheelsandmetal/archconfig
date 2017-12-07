@@ -2,7 +2,7 @@
 
 "" vim-plug Setting {{{
 "" github.com/junegunn/vim-plug
-"" To install use :PluginInstall
+"" To install use :PlugInstall
 
 set nocompatible
 filetype off
@@ -12,6 +12,7 @@ call plug#begin()
 
 Plug 'neomake/neomake'
 Plug 'junegunn/goyo.vim'
+Plug 'altercation/vim-colors-solarized'
 "Plug 'Raimondi/delimitMate'
 "Plug 'mhinz/vim-startify'
 "Plugin 'godlygeek/tabular'
@@ -31,8 +32,9 @@ aug END
 "Look and Feel {{{
 
 " Color scheme
-colo desert
 syntax on
+set background=dark
+colorscheme solarized
 
 
 " Enable syntax highlighting
@@ -41,9 +43,10 @@ syntax on
 
 " Showing line numbers and length
 set number  " show line numbers
-"set tw=79   " width of document (used by gd)
-"set colorcolumn=80
-"highlight ColorColumn ctermbg=233
+set relativenumber
+set tw=79   " width of document (used by gd)
+set colorcolumn=80
+highlight ColorColumn ctermbg=233
 
  " Status line settings
 set laststatus=2
