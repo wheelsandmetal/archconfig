@@ -1,0 +1,19 @@
+# Config file aliases
+alias cf="cd ~/.config"
+alias cfv="vim ~/.config/nvim/init.vim"
+alias cfb="vim ~/.bashrc"
+alias cfa="vim ~/.config/.aliases"
+alias cfst="vim ~/.config/st/config.h"
+alias cfdw="vim ~/.config/dwm/config.h"
+alias cfm="vim ~/.mutt/muttrc"
+
+# Project file aliases
+alias pj="cd ~/Projects/"
+alias pje="cd ~/Projects/Euler/"
+
+# Other 
+alias ll="ls -la"
+alias ls='ls --color=auto'
+alias p="sudo pacman"
+alias vim="nvim"
+alias svim="sudo -E nvim"
