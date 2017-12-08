@@ -13,6 +13,7 @@ call plug#begin()
 Plug 'neomake/neomake'
 Plug 'junegunn/goyo.vim'
 Plug 'altercation/vim-colors-solarized'
+Plug 'tpope/vim-surround'
 "Plug 'Raimondi/delimitMate'
 "Plug 'mhinz/vim-startify'
 "Plugin 'godlygeek/tabular'
