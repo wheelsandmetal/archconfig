@@ -54,7 +54,7 @@ static const struct arg args[] = {
 	{ temp, "[TEMP %sC] ", "/sys/class/thermal/thermal_zone0/temp" },
 	{ cpu_perc, "[CPU %2s%%] ", NULL    },
 	{ ram_perc, "[RAM %2s%%] ", NULL    },
-	{ vol_perc, "[VOL %s%] ", "/dev/mixer1" },
 	{battery_perc, "[BAT %s%] ", "BAT0" },
+	{ ipv4, "[LAN IP %s] ", "enp0s25" },
 	{ datetime, "[%s]",       "%F %T" },
 };

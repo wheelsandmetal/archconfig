@@ -56,5 +56,5 @@ sudo bash $HOME/.config/scripts/wifi-spoof-bern.sh # Only need for Bern wifi, th
 #sudo localectl set-x11-keymap gb pc105 "" ctrl:swapcaps
 
 exec $HOME/.config/slstatus/slstatus &
-exec urxvt &
+exec st &
 exec $HOME/.config/dwm/dwm

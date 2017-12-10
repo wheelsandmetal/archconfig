@@ -1,6 +1,6 @@
 " vim:fdm=marker
 
-"" vim-plug Setting {{{
+" vim-plug Setting {{{
 "" github.com/junegunn/vim-plug
 "" To install use :PlugInstall
 
@@ -12,11 +12,12 @@ call plug#begin()
 
 Plug 'neomake/neomake'
 Plug 'junegunn/goyo.vim'
-Plug 'altercation/vim-colors-solarized'
 Plug 'tpope/vim-surround'
 "Plug 'Raimondi/delimitMate'
 "Plug 'mhinz/vim-startify'
 "Plugin 'godlygeek/tabular'
+Plug 'altercation/vim-colors-solarized'
+Plug 'iCyMind/NeoSolarized'
 
 call plug#end()            " required
 filetype plugin on
@@ -30,17 +31,15 @@ aug reload_vimrc
 aug END
 
 "" }}}
-"Look and Feel {{{
+" Look and Feel {{{
 
 " Color scheme
 syntax on
 set background=dark
-colorscheme solarized
-
-
-" Enable syntax highlighting
-" You need to reload this file for the change to apply
-
+"" Toggle comments on following lines if colo is weird
+"colorscheme solarized
+colorscheme NeoSolarized
+set tgc
 
 " Showing line numbers and length
 set number  " show line numbers
@@ -55,7 +54,6 @@ set statusline=%f " shortend current file path
 set statusline+=%m " is current file modified
 set statusline+=%= " switch sies
 set statusline+=%.20{getcwd()} " current working dir limited to 20char
-
 
 " }}}
 " Tests {{{
@@ -151,23 +149,6 @@ set incsearch
 set ignorecase
 set smartcase
 
-" Better navigating through omnicomplete option list
-" See http://stackoverflow.com/questions/2170023/how-to-map-keys-for-popup-menu-in-vim
-set completeopt=longest,menuone
-function! OmniPopup(action)
-    if pumvisible()
-        if a:action == 'j'
-            return "\<C-N>"
-        elseif a:action == 'k'
-            return "\<C-P>"
-        endif
-    endif
-    return a:action
-endfunction
-
-inoremap <silent><C-j> <C-R>=OmniPopup('j')<CR>
-inoremap <silent><C-k> <C-R>=OmniPopup('k')<CR>
-
 " }}}
 " Plugin Settings {{{
 
@@ -259,17 +240,12 @@ aug END
 
 
 "{{{
-autocmd FileType tex inoremap ;fr \begin{frame}<Enter>\frametitle{}<Enter><Enter><++><Enter><Enter>\end{frame}<Enter><Enter><++><Esc>6kf}i
-autocmd FileType tex inoremap ;fi \begin{fitch}<Enter><Enter>\end{fitch}<Enter><Enter><++><Esc>3kA
-autocmd FileType tex inoremap ;exe \begin{exe}<Enter>\ex<Space><Enter>\end{exe}<Enter><Enter><++><Esc>3kA
-
 " Texttypes
 autocmd FileType tex inoremap ;em \emph{}<++><Esc>T{i
 autocmd FileType tex inoremap ;bf \textbf{}<++><Esc>T{i
 autocmd FileType tex inoremap ;it \textit{}<++><Esc>T{i
 autocmd FileType tex inoremap ;ct \textcite{}<++><Esc>T{i
 autocmd FileType tex inoremap ;cp \parencite{}<++><Esc>T{i
-autocmd FileType tex inoremap ;glos {\gll<Space><++><Space>\\<Enter><++><Space>\\<Enter>\trans{``<++>''}}<Esc>2k2bcw
 
 "Begintypes
 autocmd FileType tex inoremap ;be \begin{<++>}<Enter>\ex<Space><Enter>\end{<++>}<Esc>kA<Space>
