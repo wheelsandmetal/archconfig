@@ -8,4 +8,4 @@
 # Alias file
 source ~/.config/.aliases
 
-PS1='[\u@\h \W]\$ '
+PS1="\[\e[35m\]\u@\h \[\e[0m\]\W \$ "
