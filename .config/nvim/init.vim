@@ -13,6 +13,7 @@ call plug#begin()
 Plug 'neomake/neomake'
 Plug 'junegunn/goyo.vim'
 Plug 'tpope/vim-surround'
+Plug 'lervag/vimtex'
 "Plug 'Raimondi/delimitMate'
 "Plug 'mhinz/vim-startify'
 "Plugin 'godlygeek/tabular'
@@ -164,22 +165,22 @@ nnoremap <leader>r :NERDTreeFind<cr>
 
 " VimTex {{{
 let g:vimtex_view_method = 'mupdf'
-let g:vimtex_compiler_latexmk = {
-	\ 'backend' : 'jobs',
-	\ 'background' : 0,
-	\ 'build_dir' : '',
-	\ 'callback' : 1,
-	\ 'continuous' : 1,
-	\ 'executable' : 'latexmk',
-	\ 'options' : [
-	\   '-pdf',
-	\   '-verbose',
-	\   '-file-line-error',
-	\   '-synctex=1',
-	\   '-interaction=nonstopmode',
-	\ ],
-	\}
-let g:vimtex_view_automatic = 1
+"let g:vimtex_compiler_latexmk = {
+"	\ 'backend' : 'jobs',
+"	\ 'background' : 0,
+"	\ 'build_dir' : '',
+"	\ 'callback' : 1,
+"	\ 'continuous' : 1,
+"	\ 'executable' : 'latexmk',
+"	\ 'options' : [
+"	\   '-pdf',
+"	\   '-verbose',
+"	\   '-file-line-error',
+"	\   '-synctex=1',
+"	\   '-interaction=nonstopmode',
+"	\ ],
+"	\}
+"let g:vimtex_view_automatic = 1
 
 "" }}}
 
@@ -234,7 +235,7 @@ aug END
 " $pdf_previewer = 'mupdf';
 aug auto_compile_Tex
 	au!
-	au Filetype tex noremap <F6> :NeomakeSh latexmk -cd -pdf -interaction=nonstopmode %<cr>:NeomakeSh Killall -HUP mupdf<cr>
+	au Filetype tex noremap <F6> :NeomakeSh latexmk -cd -pdf %<cr>
 	au FileType tex noremap <F5> :NeomakeSh mupdf %:r.pdf<cr>
 aug END
 
