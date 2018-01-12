@@ -6,6 +6,8 @@ alias cfa="vim ~/.config/.aliases"
 alias cfst="vim ~/.config/st/config.h"
 alias cfdw="vim ~/.config/dwm/config.h"
 alias cfm="vim ~/.mutt/muttrc"
+alias cfsl="vim ~/.config/slstatus/config.h"
+
 
 # Project file aliases
 alias pj="cd ~/Projects/"
