@@ -49,7 +49,7 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
 fi
 
 #!/bin/sh
-sudo bash $HOME/.config/scripts/wifi-spoof-bern.sh # Only need for Bern wifi, they only whitelisted 2 MAC address
+#sudo bash $HOME/.config/scripts/wifi-spoof-bern.sh # Only need for Bern wifi, they only whitelisted 2 MAC address
 
 # Swapping left control with caps, needed to use Xkb as xmodmap was being weird
 # If this is a new install run, uncomment the line below and restart X then recomment it (or don't I don't care)
