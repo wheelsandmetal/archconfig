@@ -7,22 +7,39 @@
 set nocompatible
 filetype off
 
-set rtp+=~/.vim/plugged
 call plug#begin()
 
 Plug 'neomake/neomake'
 Plug 'junegunn/goyo.vim'
 Plug 'tpope/vim-surround'
+
+"" Python
+Plug 'tmhedberg/SimpylFold'
+
+"" LaTeX
 Plug 'lervag/vimtex'
+
+"" Markdown
+function! BuildComposer(info)
+	if a:info.status != 'unchanged' || a:info.force
+		if has('nvim')
+			!cargo build --release
+		else
+			!cargo build --release --no-default-features --features json-rpc
+		endif
+	endif
+endfunction
+
+" Must run `cargo build --release` in plugin directory
+Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
+
 "Plug 'Raimondi/delimitMate'
 "Plug 'mhinz/vim-startify'
 "Plugin 'godlygeek/tabular'
-Plug 'altercation/vim-colors-solarized'
+"" Colours
 Plug 'iCyMind/NeoSolarized'
 
 call plug#end()            " required
-filetype plugin on
-filetype plugin indent on    " required
 
 
 "" Automatic reloading of .vimrc
@@ -42,12 +59,10 @@ set background=dark
 colorscheme NeoSolarized
 set tgc
 
-" Showing line numbers and length
+" Curser and Number setting
 set number  " show line numbers
 set relativenumber
-set tw=79   " width of document (used by gd)
-set colorcolumn=80
-highlight ColorColumn ctermbg=233
+set cursorline
 
  " Status line settings
 set laststatus=2
@@ -62,58 +77,34 @@ set statusline+=%.20{getcwd()} " current working dir limited to 20char
 set path+=**
 
 " }}}
-" Bindings {{{
+" General Settings {{{
+
+" Set shell to powershell
+"set shell=C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+
+" Bind exiting the terminal
+tnoremap <c-[> <c-\><c-n> 
+
 
 " Abbreviations {{{
 
-
 :iabbrev @@ jakob@schmutz.co.uk
+:iabbrev @@w jakob.schmutz@apteco.co.uk
 
 
 " }}}
-
-"" Leader Bindings {{{
-
-
 
 "" Rebind <Leader> key
 nnoremap <Space> <NOP>
 let mapleader = "\<Space>"
 
-
 "" Quickly open .vimrc
 nnoremap <leader>v :e $MYVIMRC<cr>
 
-"" Quick quit command
+"" File commands
 noremap <Leader>q :q<CR>  " Quit current window
 noremap <Leader>Q :wqa!<CR>   " Quit all windows
-
-"" Quick save command
 noremap <leader>w :w<cr>
-
-""Quick tab movement
-noremap <leader>n :tabprevious<cr>
-noremap <leader>m :tabnext<cr>
-
-"" Quick sort
-"vnoremap <Leader>s :sort<CR>
-
-" }}}
-
-" Exit normal mode
-inoremap jj <esc>
-
-" Navigating with guides
-inoremap <Space><Tab> <Esc>/<++><Enter>"_c4l
-vnoremap <Space><Tab> <Esc>/<++><Enter>"_c4l
-map <Space><Tab> <Esc>/<++><Enter>"_c4l
-inoremap ;gui <++>
-
-" Easy Search
-nnoremap S :%s//g<Left><Left>
-
-" Map : to ; for easy cmd line tools
-nnoremap ; :
 
 " Super easy split management {{{
 " Fuction to check if a split exits in a given direction and open one if not
@@ -134,21 +125,12 @@ nnoremap <silent> <c-w>l :call SelectorOpenNewSplit('l', 'leftabove vsplit')<cr>
 
 "}}}
 
-" Bind no highlight, removes highlighting
-"nnoremap <C-n> :nohl<CR>
-
-" Easier moving of code blocks
-vnoremap < <gv  "" better indentation
-vnoremap > >gv  "" better indentation
-
-" }}}
-" General Settings {{{
-
-" Make search case insensitive
+" Search Settings
 set hlsearch
 set incsearch
 set ignorecase
 set smartcase
+nnoremap <leader>, :nohl<cr>
 
 " }}}
 " Plugin Settings {{{
@@ -157,8 +139,8 @@ set smartcase
 
 
 " Open root dictionary
-nnoremap <leader>t :NERDTree ~/<cr>
-nnoremap <leader>r :NERDTreeFind<cr>
+"nnoremap <leader>t :NERDTree ~/<cr>
+"nnoremap <leader>r :NERDTreeFind<cr>
 
 
 " }}}
@@ -194,12 +176,40 @@ nnoremap <leader>g :Goyo<cr>
 "" }}}
 " Python Settings {{{
 
-" Run python script
-aug runscript
-    au!
-    au FileType python nnoremap <silent><F5> :w!<cr>:!python3 %<cr>
+" Point neovim at python3 env
+let g:python3_host_prog = 'C:\Python\Lib\site-packages\neovim\'
+
+
+" some settings to make python easier to work with
+aug pythonSetting
+	au!
+	au filetype python setlocal tabstop=4
+	au filetype python setlocal softtabstop=4
+	au filetype python setlocal shiftwidth=4
+	au filetype python setlocal textwidth=79
+	au filetype python setlocal expandtab
+	au filetype python setlocal autoindent
+	au filetype python setlocal fileformat=unix
+	au filetype python setlocal colorcolumn=80
+	au filetype python highlight ColorColumn ctermbg=233
 aug END
 
+" Run python script
+aug runscript
+	au!
+	au FileType python nnoremap <silent><leader>fs :w!<cr>:!py %<cr>
+aug END
+
+" }}}
+
+" Markdown Settings {{{
+"
+"
+
+aug spell_checkMd
+    au!
+    au filetype markdown setlocal spell
+aug END
 " }}}
 " Octave Setttings {{{
 
@@ -239,6 +249,15 @@ aug auto_compile_Tex
 	au FileType tex noremap <F5> :NeomakeSh mupdf %:r.pdf<cr>
 aug END
 
+" Navigating with guides
+aug nav_bindings
+	au!
+	au Filetype tex
+		\inoremap <Space><Tab> <Esc>/<++><Enter>"_c4l
+		\vnoremap <Space><Tab> <Esc>/<++><Enter>"_c4l
+		\map <Space><Tab> <Esc>/<++><Enter>"_c4l
+		\inoremap ;gui <++>
+aug END
 
 "{{{
 " Texttypes
@@ -249,35 +268,15 @@ autocmd FileType tex inoremap ;ct \textcite{}<++><Esc>T{i
 autocmd FileType tex inoremap ;cp \parencite{}<++><Esc>T{i
 
 "Begintypes
-autocmd FileType tex inoremap ;be \begin{<++>}<Enter>\ex<Space><Enter>\end{<++>}<Esc>kA<Space>
-autocmd FileType tex inoremap ;x \begin{xlist}<Enter>\ex<Space><Enter>\end{xlist}<Esc>kA<Space>
 autocmd FileType tex inoremap ;ol \begin{enumerate}<Enter><Enter>\end{enumerate}<Enter><Enter><++><Esc>3kA\item<Space>
 autocmd FileType tex inoremap ;bit \begin{itemize}<Enter><Enter>\end{itemize}<Enter><Enter><++><Esc>3kA\item<Space>
 autocmd FileType tex inoremap ;li <Enter>\item<Space>
 autocmd FileType tex inoremap ;ref \ref{}<Space><++><Esc>T{i
 autocmd FileType tex inoremap ;tab \begin{tabular}<Enter><++><Enter>\end{tabular}<Enter><Enter><++><Esc>4kA{}<Esc>i
-autocmd FileType tex inoremap ;ot \begin{tableau}<Enter>\inp{<++>}<Tab>\const{<++>}<Tab><++><Enter><++><Enter>\end{tableau}<Enter><Enter><++><Esc>5kA{}<Esc>i
-autocmd FileType tex inoremap ;can \cand{}<Tab><++><Esc>T{i
-autocmd FileType tex inoremap ;con \const{}<Tab><++><Esc>T{i
-autocmd FileType tex inoremap ;v \vio{}<Tab><++><Esc>T{i
-autocmd FileType tex inoremap ;a \href{}{<++>}<Space><++><Esc>2T{i
-autocmd FileType tex inoremap ;sc \textsc{}<Space><++><Esc>T{i
-autocmd FileType tex inoremap ;chap \chapter{}<Enter><Enter><++><Esc>2kf}i
 autocmd FileType tex inoremap ;sec \section{}<Enter><Enter><++><Esc>2kf}i
 autocmd FileType tex inoremap ;ssec \subsection{}<Enter><Enter><++><Esc>2kf}i
 autocmd FileType tex inoremap ;sssec \subsubsection{}<Enter><Enter><++><Esc>2kf}i
-autocmd FileType tex inoremap ;st <Esc>F{i*<Esc>f}i
-autocmd FileType tex inoremap ;up <Esc>/usepackage<Enter>o\usepackage{}<Esc>:noh<cr>i
-autocmd FileType tex inoremap ;tt \texttt{}<Space><++><Esc>T{i
-autocmd FileType tex inoremap ;bt {\blindtext}
-autocmd FileType tex inoremap ;nu $\varnothing$
-autocmd FileType tex inoremap ;col \begin{columns}[T]<Enter>\begin{column}{.5\textwidth}<Enter><Enter>\end{column}<Enter>\begin{column}{.5\textwidth}<Enter><++><Enter>\end{column}<Enter>\end{columns}<Esc>5kA
-autocmd FileType tex inoremap ;rn (\ref{})<++><Esc>F}i
-
-"".bib
-autocmd FileType bib inoremap ;a @article{<Enter><Tab>author<Space>=<Space>"<++>",<Enter><Tab>year<Space>=<Space>"<++>",<Enter><Tab>title<Space>=<Space>"<++>",<Enter><Tab>journal<Space>=<Space>"<++>",<Enter><Tab>volume<Space>=<Space>"<++>",<Enter><Tab>pages<Space>=<Space>"<++>",<Enter><Tab>}<Enter><++><Esc>8kA,<Esc>i
-autocmd FileType bib inoremap ;b @book{<Enter><Tab>author<Space>=<Space>"<++>",<Enter><Tab>year<Space>=<Space>"<++>",<Enter><Tab>title<Space>=<Space>"<++>",<Enter><Tab>publisher<Space>=<Space>"<++>",<Enter><Tab>}<Enter><++><Esc>6kA,<Esc>i
-autocmd FileType bib inoremap ;c @incollection{<Enter><Tab>author<Space>=<Space>"<++>",<Enter><Tab>title<Space>=<Space>"<++>",<Enter><Tab>booktitle<Space>=<Space>"<++>",<Enter><Tab>editor<Space>=<Space>"<++>",<Enter><Tab>year<Space>=<Space>"<++>",<Enter><Tab>publisher<Space>=<Space>"<++>",<Enter><Tab>}<Enter><++><Esc>8kA,<Esc>i
+autocmd FileType tex inoremap ;up <Esc>/usepackage<Enter>No\usepackage{}<Esc>:noh<cr>i
 "}}}
 
 " }}}

@@ -10,12 +10,11 @@ alias cfsl="vim ~/.config/slstatus/config.h"
 
 
 # Project file aliases
-alias pj="cd ~/Projects/"
+alias pj="cd /mnt/c/Projects/"
 alias pje="cd ~/Projects/Euler/"
 
 # Other 
 alias ll="ls -la"
-alias ls='ls --color=auto'
 alias p="sudo pacman"
 alias vim="nvim"
 alias svim="sudo -E nvim"
