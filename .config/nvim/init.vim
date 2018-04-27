@@ -36,8 +36,10 @@ Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
 "Plug 'Raimondi/delimitMate'
 "Plug 'mhinz/vim-startify'
 "Plugin 'godlygeek/tabular'
+
 "" Colours
 Plug 'iCyMind/NeoSolarized'
+Plug 'altercation/vim-colors-solarized'
 
 call plug#end()            " required
 
@@ -52,16 +54,14 @@ aug END
 " Look and Feel {{{
 
 " Color scheme
-syntax on
+syntax enable
+let g:solarized_termcolors=256
 set background=dark
-"" Toggle comments on following lines if colo is weird
 "colorscheme solarized
 colorscheme NeoSolarized
-set tgc
 
 " Curser and Number setting
 set number  " show line numbers
-set relativenumber
 set cursorline
 
  " Status line settings
@@ -69,7 +69,7 @@ set laststatus=2
 set statusline=%f " shortend current file path
 set statusline+=%m " is current file modified
 set statusline+=%= " switch sies
-set statusline+=%.20{getcwd()} " current working dir limited to 20char
+set statusline+=%.30{getcwd()} " current working dir limited to 20char
 
 " }}}
 " Tests {{{

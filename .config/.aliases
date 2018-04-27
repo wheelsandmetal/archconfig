@@ -11,6 +11,7 @@ alias cfsl="vim ~/.config/slstatus/config.h"
 
 # Project file aliases
 alias pj="cd /mnt/c/Projects/"
+alias pjf="cd /mnt/c/Projects/FastStatsPy/"
 alias pje="cd ~/Projects/Euler/"
 
 # Other 
