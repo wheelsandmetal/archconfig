@@ -3,35 +3,46 @@
 " vim-plug Setting {{{
 "" github.com/junegunn/vim-plug
 "" To install use :PlugInstall
-
 set nocompatible
-filetype off
 
 call plug#begin()
 
 Plug 'neomake/neomake'
 Plug 'junegunn/goyo.vim'
 Plug 'tpope/vim-surround'
+Plug 'kana/vim-submode'
+
+Plug 'ncm2/ncm2'
+Plug 'roxma/nvim-yarp'
+Plug 'ncm2/ncm2-bufword'
+Plug 'ncm2/ncm2-tmux'
+Plug 'ncm2/ncm2-path'
+Plug 'ncm2/ncm2-jedi'
+Plug 'gaalcaras/ncm-R'
 
 "" Python
 Plug 'tmhedberg/SimpylFold'
+"Plug 'Shougo/deoplete.nvim'
+"
+"" R
+Plug 'jalvesaq/Nvim-R'
 
 "" LaTeX
 Plug 'lervag/vimtex'
 
 "" Markdown
-function! BuildComposer(info)
-	if a:info.status != 'unchanged' || a:info.force
-		if has('nvim')
-			!cargo build --release
-		else
-			!cargo build --release --no-default-features --features json-rpc
-		endif
-	endif
-endfunction
+"function! BuildComposer(info)
+"	if a:info.status != 'unchanged' || a:info.force
+"		if has('nvim')
+"			!cargo build --release
+"		else
+"			!cargo build --release --no-default-features --features json-rpc
+"		endif
+"	endif
+"endfunction
 
 " Must run `cargo build --release` in plugin directory
-Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
+"Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
 
 "Plug 'Raimondi/delimitMate'
 "Plug 'mhinz/vim-startify'
@@ -74,6 +85,10 @@ set statusline+=%.30{getcwd()} " current working dir limited to 20char
 " }}}
 " Tests {{{
 
+" Reduce time out deylay
+set timeoutlen=1000 ttimeoutlen=0
+
+
 set path+=**
 
 " }}}
@@ -81,6 +96,7 @@ set path+=**
 
 " Set shell to powershell
 "set shell=C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+
 
 " Bind exiting the terminal
 tnoremap <c-[> <c-\><c-n> 
@@ -123,6 +139,18 @@ nnoremap <silent> <c-w>j :call SelectorOpenNewSplit('j', 'leftabove split')<cr>
 nnoremap <silent> <c-w>h :call SelectorOpenNewSplit('h', 'leftabove vsplit')<cr>
 nnoremap <silent> <c-w>l :call SelectorOpenNewSplit('l', 'leftabove vsplit')<cr>
 
+" grow/shrink
+call submode#enter_with('grow/shrink', 'n', '', '<C-w>+', '<C-w>+')
+call submode#enter_with('grow/shrink', 'n', '', '<C-w>-', '<C-w>-')
+call submode#map('grow/shrink', 'n', '', '-', '<C-w>-')
+call submode#map('grow/shrink', 'n', '', '+', '<C-w>+')
+
+" left/right
+call submode#enter_with('left/right', 'n', '', '<C-w><', '<C-w><')
+call submode#enter_with('left/right', 'n', '', '<C-w>>', '<C-w>>')
+call submode#map('left/right', 'n', '', '<', '<C-w><')
+call submode#map('left/right', 'n', '', '>', '<C-w>>')
+
 "}}}
 
 " Search Settings
@@ -134,16 +162,6 @@ nnoremap <leader>, :nohl<cr>
 
 " }}}
 " Plugin Settings {{{
-
-" Nerd Tree {{{
-
-
-" Open root dictionary
-"nnoremap <leader>t :NERDTree ~/<cr>
-"nnoremap <leader>r :NERDTreeFind<cr>
-
-
-" }}}
 
 " VimTex {{{
 let g:vimtex_view_method = 'mupdf'
@@ -173,11 +191,61 @@ nnoremap <leader>g :Goyo<cr>
 
 " }}}
 
+" {{{ ncm2
+
+" enable ncm2 for all buffer
+autocmd BufEnter * call ncm2#enable_for_buffer()
+"
+" " note that must keep noinsert in completeopt, the others is optional
+set completeopt=noinsert,menuone,noselect
+"
+" " ### The following vimrc is optional
+"
+" " supress the annoying 'match x of y', 'The only match' messages
+set shortmess+=c
+"
+" " CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
+inoremap <c-c> <ESC>
+"
+" " When the <Enter> key is pressed while the popup menu is visible, it only
+" " hides the menu. Use this mapping to close the menu and also start a new
+" " line.
+inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+"
+" " Use <TAB> to select the popup menu:
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+"
+" " trigger completion on <backspace> and <c-w>
+imap <backspace> <backspace><Plug>(ncm2_auto_trigger)
+imap <c-w> <c-w><Plug>(ncm2_auto_trigger)
+"
+" " wrap existing omnifunc
+" " Note that omnifunc does not run in background and may probably block the
+" " editor. If you don't want to be blocked by omnifunc too often, you could add
+" " 180ms delay before the omni wrapper:
+" "  'on_complete': ['ncm2#on_complete#delay', 180,
+" "               \ 'ncm2#on_complete#omni', 'csscomplete#CompleteCSS'],
+au User Ncm2Plugin call ncm2#register_source({
+			\ 'name' : 'css',
+			\ 'priority': 9, 
+			\ 'subscope_enable': 1,
+			\ 'scope': ['css','scss'],
+			\ 'mark': 'css',
+			\ 'word_pattern': '[\w\-]+',
+			\ 'complete_pattern': ':\s*',
+			\ 'on_complete': ['ncm2#on_complete#omni', 'csscomplete#CompleteCSS'],
+			\ })
+
+
+" }}}
+
 "" }}}
+
 " Python Settings {{{
 
 " Point neovim at python3 env
-let g:python3_host_prog = 'C:\Python\Lib\site-packages\neovim\'
+let g:python3_host_prog = '/usr/sbin/python'
 
 
 " some settings to make python easier to work with
@@ -191,13 +259,32 @@ aug pythonSetting
 	au filetype python setlocal autoindent
 	au filetype python setlocal fileformat=unix
 	au filetype python setlocal colorcolumn=80
-	au filetype python highlight ColorColumn ctermbg=233
 aug END
 
 " Run python script
 aug runscript
 	au!
-	au FileType python nnoremap <silent><leader>fs :w!<cr>:!py %<cr>
+	au FileType python nnoremap <silent><leader>fs :w!<cr>:!python %<cr>
+aug END
+
+" }}}
+
+" R Settings {{{
+
+
+let r_indent_ess_compatible = 1
+let r_indent_align_args = 0
+" some settings to make R easier to work with
+aug RSetting
+	au!
+	au filetype r setlocal tabstop=2
+	au filetype r setlocal softtabstop=2
+	au filetype r setlocal shiftwidth=2
+	au filetype r setlocal textwidth=79
+	au filetype r setlocal expandtab
+	au filetype r setlocal autoindent
+	au filetype r setlocal fileformat=unix
+	au filetype r setlocal colorcolumn=80
 aug END
 
 " }}}
