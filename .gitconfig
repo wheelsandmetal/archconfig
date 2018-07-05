@@ -1,5 +1,7 @@
 [user]
-	name = wheelsandmetal
-	email = jakob@schmutz.co.uk
+	name = Jakob Schmutz
+	email = jakob.schmutz@apteco.co.uk
 [core]
 	editor = nvim
+	autocrlf = true
+
