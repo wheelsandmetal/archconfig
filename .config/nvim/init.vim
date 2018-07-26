@@ -12,18 +12,19 @@ Plug 'junegunn/goyo.vim'
 Plug 'tpope/vim-surround'
 Plug 'kana/vim-submode'
 
-Plug 'ncm2/ncm2'
-Plug 'roxma/nvim-yarp'
-Plug 'ncm2/ncm2-bufword'
-Plug 'ncm2/ncm2-tmux'
-Plug 'ncm2/ncm2-path'
-Plug 'ncm2/ncm2-jedi'
-Plug 'gaalcaras/ncm-R'
+"" lsp
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+
+Plug 'junegunn/fzf'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+
 
 "" Python
 Plug 'tmhedberg/SimpylFold'
-"Plug 'Shougo/deoplete.nvim'
-"
+ 
 "" R
 Plug 'jalvesaq/Nvim-R'
 
@@ -44,13 +45,9 @@ Plug 'lervag/vimtex'
 " Must run `cargo build --release` in plugin directory
 "Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
 
-"Plug 'Raimondi/delimitMate'
-"Plug 'mhinz/vim-startify'
-"Plugin 'godlygeek/tabular'
 
 "" Colours
 Plug 'iCyMind/NeoSolarized'
-Plug 'altercation/vim-colors-solarized'
 
 call plug#end()            " required
 
@@ -193,52 +190,52 @@ nnoremap <leader>g :Goyo<cr>
 
 " {{{ ncm2
 
-" enable ncm2 for all buffer
-autocmd BufEnter * call ncm2#enable_for_buffer()
+"" enable ncm2 for all buffer
+"autocmd BufEnter * call ncm2#enable_for_buffer()
+""
+"" " note that must keep noinsert in completeopt, the others is optional
+"set completeopt=noinsert,menuone,noselect
+""
+"" " ### The following vimrc is optional
+""
+"" " supress the annoying 'match x of y', 'The only match' messages
+"set shortmess+=c
+""
+"" " CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
+"inoremap <c-c> <ESC>
+""
+"" " When the <Enter> key is pressed while the popup menu is visible, it only
+"" " hides the menu. Use this mapping to close the menu and also start a new
+"" " line.
+"inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+""
+"" " Use <TAB> to select the popup menu:
+"inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+"inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+""
+"" " trigger completion on <backspace> and <c-w>
+"imap <backspace> <backspace><Plug>(ncm2_auto_trigger)
+"imap <c-w> <c-w><Plug>(ncm2_auto_trigger)
+""
+"" " wrap existing omnifunc
+"" " Note that omnifunc does not run in background and may probably block the
+"" " editor. If you don't want to be blocked by omnifunc too often, you could add
+"" " 180ms delay before the omni wrapper:
+"" "  'on_complete': ['ncm2#on_complete#delay', 180,
+"" "               \ 'ncm2#on_complete#omni', 'csscomplete#CompleteCSS'],
+"au User Ncm2Plugin call ncm2#register_source({
+			"\ 'name' : 'css',
+			"\ 'priority': 9, 
+			"\ 'subscope_enable': 1,
+			"\ 'scope': ['css','scss'],
+			"\ 'mark': 'css',
+			"\ 'word_pattern': '[\w\-]+',
+			"\ 'complete_pattern': ':\s*',
+			"\ 'on_complete': ['ncm2#on_complete#omni', 'csscomplete#CompleteCSS'],
+			"\ })
 "
-" " note that must keep noinsert in completeopt, the others is optional
-set completeopt=noinsert,menuone,noselect
 "
-" " ### The following vimrc is optional
-"
-" " supress the annoying 'match x of y', 'The only match' messages
-set shortmess+=c
-"
-" " CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
-inoremap <c-c> <ESC>
-"
-" " When the <Enter> key is pressed while the popup menu is visible, it only
-" " hides the menu. Use this mapping to close the menu and also start a new
-" " line.
-inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
-"
-" " Use <TAB> to select the popup menu:
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-"
-" " trigger completion on <backspace> and <c-w>
-imap <backspace> <backspace><Plug>(ncm2_auto_trigger)
-imap <c-w> <c-w><Plug>(ncm2_auto_trigger)
-"
-" " wrap existing omnifunc
-" " Note that omnifunc does not run in background and may probably block the
-" " editor. If you don't want to be blocked by omnifunc too often, you could add
-" " 180ms delay before the omni wrapper:
-" "  'on_complete': ['ncm2#on_complete#delay', 180,
-" "               \ 'ncm2#on_complete#omni', 'csscomplete#CompleteCSS'],
-au User Ncm2Plugin call ncm2#register_source({
-			\ 'name' : 'css',
-			\ 'priority': 9, 
-			\ 'subscope_enable': 1,
-			\ 'scope': ['css','scss'],
-			\ 'mark': 'css',
-			\ 'word_pattern': '[\w\-]+',
-			\ 'complete_pattern': ':\s*',
-			\ 'on_complete': ['ncm2#on_complete#omni', 'csscomplete#CompleteCSS'],
-			\ })
-
-
-" }}}
+"" }}}
 
 "" }}}
 
