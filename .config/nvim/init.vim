@@ -242,7 +242,8 @@ nnoremap <leader>g :Goyo<cr>
 " Python Settings {{{
 
 " Point neovim at python3 env
-let g:python3_host_prog = '/usr/sbin/python'
+let g:python3_host_prog = '/usr/local/bin/python3'
+
 
 
 " some settings to make python easier to work with
@@ -261,7 +262,7 @@ aug END
 " Run python script
 aug runscript
 	au!
-	au FileType python nnoremap <silent><leader>fs :w!<cr>:!python %<cr>
+	au FileType python nnoremap <silent><leader>fs :w!<cr>:!python3 %<cr>
 aug END
 
 " }}}
@@ -342,27 +343,6 @@ aug nav_bindings
 		\map <Space><Tab> <Esc>/<++><Enter>"_c4l
 		\inoremap ;gui <++>
 aug END
-
-"{{{
-" Texttypes
-autocmd FileType tex inoremap ;em \emph{}<++><Esc>T{i
-autocmd FileType tex inoremap ;bf \textbf{}<++><Esc>T{i
-autocmd FileType tex inoremap ;it \textit{}<++><Esc>T{i
-autocmd FileType tex inoremap ;ct \textcite{}<++><Esc>T{i
-autocmd FileType tex inoremap ;cp \parencite{}<++><Esc>T{i
-
-"Begintypes
-autocmd FileType tex inoremap ;ol \begin{enumerate}<Enter><Enter>\end{enumerate}<Enter><Enter><++><Esc>3kA\item<Space>
-autocmd FileType tex inoremap ;bit \begin{itemize}<Enter><Enter>\end{itemize}<Enter><Enter><++><Esc>3kA\item<Space>
-autocmd FileType tex inoremap ;li <Enter>\item<Space>
-autocmd FileType tex inoremap ;ref \ref{}<Space><++><Esc>T{i
-autocmd FileType tex inoremap ;tab \begin{tabular}<Enter><++><Enter>\end{tabular}<Enter><Enter><++><Esc>4kA{}<Esc>i
-autocmd FileType tex inoremap ;sec \section{}<Enter><Enter><++><Esc>2kf}i
-autocmd FileType tex inoremap ;ssec \subsection{}<Enter><Enter><++><Esc>2kf}i
-autocmd FileType tex inoremap ;sssec \subsubsection{}<Enter><Enter><++><Esc>2kf}i
-autocmd FileType tex inoremap ;up <Esc>/usepackage<Enter>No\usepackage{}<Esc>:noh<cr>i
-"}}}
-
 " }}}
 " Java Settings {{{
 
